@@ -1,0 +1,28 @@
+import Reaxt, {useState} from "react";
+
+type FormTabsType = {
+    title: string
+    description?: string
+    id?: number
+}
+export const FormTabsSelect: React.FC<FormTabsType> = (
+    {
+        title, description, id,
+        ...restProps
+    }
+) => {
+    const [checked, setChecked] = useState(false)
+
+    return (
+        <div className={s.flex}>
+            <div className={checked ? s.mainitem : s.mainitemRed}>{id}</div>
+            <div className={s.sideitem}>
+                <div onClick={() => setChecked(!checked)}
+                     className={checked ? s.item : s.itemRed}>
+                    <span>{title}</span>
+                </div>
+                {checked && <div style={{border: '2px'}} className={s.item}>{description}</div>}
+            </div>
+        </div>
+    )
+}

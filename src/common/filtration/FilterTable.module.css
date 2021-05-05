@@ -1,0 +1,33 @@
+import React, {useState} from "react";
+import {findValueAC, sortName18plusAC, sortTableAC, tableReducer} from "../../bll/reducer";
+import {ResponseTableType} from "../../api/bd-api";
+
+type FilterTablePropsType ={
+    filter: "count" | "name" | "distance",
+    setData: any,
+    initialState: ResponseTableType[]
+}
+export  const FilterTable = (props: FilterTablePropsType ) => {
+    let [value, setValue] = useState('')
+
+
+    const sortUp = () => props.setData(tableReducer(props.initialState, sortTableAC("up", props.filter)))
+    const sortDown = () => props.setData(tableReducer(props.initialState, sortTableAC("down", props.filter)))
+    const sort18 = () => props.setData(tableReducer(props.initialState, sortName18plusAC()))
+    const findValue = () => props.setData(tableReducer(props.initialState, findValueAC(value, props.filter)))
+
+
+    return (
+        <div>
+            <div>
+                <button onClick={sortUp}>up</button>
+                <button onClick={sortDown}>down</button>
+                <button onClick={sort18}>test</button>
+                <input value={value} onChange={(e) => {
+                    setValue(e.currentTarget.value)
+                }}/>
+                <button onClick={findValue}>find</button>
+            </div>
+        </div>
+    )
+}
