@@ -1,28 +1,70 @@
-import Reaxt, {useState} from "react";
 
-type FormTabsType = {
-    title: string
-    description?: string
-    id?: number
+.flex {
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
 }
-export const FormTabsSelect: React.FC<FormTabsType> = (
-    {
-        title, description, id,
-        ...restProps
-    }
-) => {
-    const [checked, setChecked] = useState(false)
+.mainitem, .item {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    Width: 88px;
+    Height: 48px;
 
-    return (
-        <div className={s.flex}>
-            <div className={checked ? s.mainitem : s.mainitemRed}>{id}</div>
-            <div className={s.sideitem}>
-                <div onClick={() => setChecked(!checked)}
-                     className={checked ? s.item : s.itemRed}>
-                    <span>{title}</span>
-                </div>
-                {checked && <div style={{border: '2px'}} className={s.item}>{description}</div>}
-            </div>
-        </div>
-    )
+}
+
+.mainitemRed {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 24px;
+    opacity: 0.35;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    Width: 88px;
+    Height: 48px;
+
+}
+
+.item span {
+    background-image: url(uparrow.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+    width: 100%;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.itemRed {
+    background-image: url(arrowdown.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 10px;
+
+}
+
+
+.sideitem {
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.item {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    line-height: 16px;
+
 }

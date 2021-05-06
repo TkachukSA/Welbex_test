@@ -1,79 +1,92 @@
-import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppStoreType} from "../../../bll/store/store";
-import {CardPacksType, CardsApiType} from "../dall/cardsApi";
-import {getPacksTC} from "../bll/PacksReducer";
-import s from './Cards.module.css'
-import {Paginations} from "./Pagination";
-import l from '../../../common/c1-LoadingBar/Loading.module.css'
-import {getCardsTC} from "../bll/CardsReducer";
+import React, {useState} from "react";
+import s from './Table.module.css'
+import {ResponseTableType} from "../api/bd-api";
+import {FilterTable} from "../common/filtration/FilterTable";
+import {FormTabsSelect} from "../common/formTabsSelect/FormTabsSelect";
+import {Paginator} from "../common/pagination/Pagination";
 
 
-export function Cards() {
-    const cards = useSelector<AppStoreType, CardsApiType[]>(state => state.cards.card)
-    const isLoading = useSelector<AppStoreType, boolean>(state => state.packs.isLoading)
-    const error = useSelector<AppStoreType, string>(state => state.recovery.error)
-    const cardPacksTotalCount = useSelector<AppStoreType, number>(state => state.packs.cardPacksTotalCount)
-    const pageSize = useSelector<AppStoreType, number>(state => state.packs.pageSize)
-    const dispatch = useDispatch()
+type TableType = {
+    table: ResponseTableType[],
+    initialState: ResponseTableType[],
+    setData: any
+}
 
-    useEffect(() => {
+export const Table: React.FC<TableType> = React.memo(({table, initialState, setData}) => {
+    const [currentPage, setCurrentPage] = useState(1)
 
-    }, [])
-
-
-    const findTitle = (page: number, pageSize: number, find: string) => {
-        dispatch(getCardsTC( null,page, pageSize, find))
+    function DisplayList(items: any, rowsPage: number, page: number) {
+        page--
+        let start = rowsPage * page
+        let end = start + rowsPage
+        let paginatedItems = items.slice(start, end)
+        let item = []
+        for (let i = 0; i < paginatedItems.length; i++) {
+            let items = paginatedItems[i]
+            item.push(items)
+        }
+        return item
     }
 
-    const chengedDoubleRange = (page: number, pageSize: number, find: string, min: number, max: number) => {
-        dispatch(getCardsTC(null, page, pageSize, find, min, max))
-    }
-    const onChangeselect = (page: number, pageSize: number, find: string) => {
-        dispatch(getCardsTC(null,page, pageSize, find))
-    }
 
+    let sortItems = DisplayList(table, 10, currentPage)
 
     return (
-
-        <div className={isLoading ? l.loader : ''}>
-
-            <div className={isLoading ? s.err : ''}>
-
-                <Paginations
-                    onChangeselect={onChangeselect}
-                    chengedDoubleRange={chengedDoubleRange}
-                    findTitle={findTitle}
-                    cardPacksTotalCount={cardPacksTotalCount}
-                    pageSize={pageSize}
-                />
-
-
+        <div className={s.tableContainer}>
+            <div className={s.container}>
                 <table className={s.table}>
                     <thead>
                     <tr>
-                        <th>Question</th>
-                        <th>Grade</th>
-                        <th>updated</th>
-                        <th>questionImg</th>
+                        <th><FormTabsSelect title={'name'}
+                                            description={
+                                                <FilterTable filter={"name"}
+                                                             initialState={initialState}
+                                                             setData={setData}/>
+                                            }/></th>
+                        <th>
+                            <FormTabsSelect title={'count'}
+                                            description={
+                                                <div>
+                                                    <FilterTable filter={"count"}
+                                                                 initialState={initialState}
+                                                                 setData={setData}/>
+                                                </div>
+                                            }/>
+                        </th>
+                        <th>
+                            <FormTabsSelect title={'distance'}
+                                            description={
+                                                <div>
+                                                    <FilterTable filter={"distance"}
+                                                                 initialState={initialState}
+                                                                 setData={setData}/>
+                                                </div>
+                                            }/>
+                        </th>
+                        <th>date</th>
                     </tr>
                     </thead>
                     {
-                        cards && cards.map((t) =>
-                            <tbody key={t._id}>
-                            <tr key={t._id}>
-                                <td>{t.question}</td>
-                                <td >{t.grade}</td>
-                                <td>{t.updated}</td>
-                                <td>{t.questionImg}</td>
-
+                        sortItems && sortItems.map((t) =>
+                            <tbody key={t.id}>
+                            <tr key={t.id}>
+                                <td>{t.name}</td>
+                                <td>{t.count}</td>
+                                <td>{t.distance}</td>
+                                <td>{new Date(t.date).toLocaleDateString()}</td>
                             </tr>
                             </tbody>
                         )}
                 </table>
             </div>
-            <div>{error}</div>
+            <div>
+                <Paginator rowsPage={10}
+                           items={initialState}
+                           currentPage={currentPage}
+                           setCurrentPage={setCurrentPage}/>
+
+            </div>
         </div>
     );
-}
+})
 

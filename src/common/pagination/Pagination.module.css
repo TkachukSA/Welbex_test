@@ -6,10 +6,8 @@ span {
 }
 .main {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    position: relative;
-    min-height: 15px;
+    padding: 20px 0;
 }
 .num {
     padding:0 3px;

@@ -1,14 +1,14 @@
-import {ResponseTableType} from "../bd-api";
+import {ResponseTableType} from "../api/bd-api";
 
 
-export const sortTableAC =(payload: "up" | "down", filter: "count" | "name" | "distance" )=> ({ type: "SORT_TABLE", payload, filter } as const )
-export const sortName18plusAC = ()=>({ type: "check", payload: 18 } as const)
-export const findValueAC = (find: string, filter: "count" | "name" | "distance") => ({type: 'FIND_VALUE', find, filter} as const)
+export const sortTableAC =(payload: "up" | "down", filter: "count" | "name" | "distance" )=> (
+    { type: "SORT_TABLE", payload, filter } as const )
+export const findValueAC = (find: string, filter: "count" | "name" | "distance") => (
+    {type: 'FIND_VALUE', find, filter} as const)
 
 
 export type ActionsType =
     | ReturnType<typeof sortTableAC>
-    | ReturnType<typeof sortName18plusAC>
     | ReturnType<typeof findValueAC>
 
 
@@ -64,11 +64,8 @@ export const tableReducer = (state: ResponseTableType[], action: ActionsType): R
             }
             return {...state}
         }
-        case "check": {
-            const newState = [...state]
-            return newState.filter(t => t.count < 180)
-        }
         case "FIND_VALUE": {
+            debugger
             const newState = [...state]
             return newState.filter(t => t[action.filter].toString().toLowerCase().indexOf(action.find.toString().toLowerCase()) > -1)
         }

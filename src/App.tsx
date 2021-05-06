@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import {mySqlAPI, ResponseTableType} from "./api/bd-api";
+import {Table} from "./table/Table";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [initialState, setInitialState] = useState<ResponseTableType[]>([])
+    const [data, setData] = useState(initialState);
+
+    const fetchData = async () => {
+        try {
+            const results = await mySqlAPI.getTable()
+            setData(results.data)
+            setInitialState(results.data)
+        } catch (error) {
+            console.log('error')
+        }
+    }
+
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
+    return (
+        <div className="App">
+            {data && <Table table={data}
+                            setData={setData}
+                            initialState={initialState}/>
+            }
+
+        </div>
+    );
 }
 
 export default App;

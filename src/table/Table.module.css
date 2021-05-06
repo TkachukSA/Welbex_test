@@ -1,13 +1,43 @@
 .table {
     border-collapse: collapse;
-
+    width: 50%;
 }
-.table th{}
+
+.table thead {
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
 .table td {
     border: 1px solid #ddd;
-    padding: 8px;
     width: 170px;
+    padding: 17px;
 }
-.err{
+
+.err {
     opacity: 0.3;
+}
+
+.tableContainer {
+    min-height: 100vh;
+    background: #b7babe36;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    padding-top: 100px;;
+
+}
+
+.formTabs {
+    border-top: 1px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
 }
